@@ -19,6 +19,14 @@ public class EmailService {
 
     public EmailService(JavaMailSender mailSender){
         this.mailSender = mailSender;
+        try {
+            // Try to read configured username for informational logging
+            // This will help diagnose misconfigured SMTP credentials in containers
+            String username = System.getenv("SPRING_MAIL_USERNAME");
+            if (username != null) {
+                System.out.println("INFO: EmailService configured with username: " + username);
+            }
+        } catch (Exception ignored) {}
     }
 
     public void sendSimpleMail(String to, String subject, String text){

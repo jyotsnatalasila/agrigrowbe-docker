@@ -23,22 +23,34 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.agrigrowbe.model.User;
 import com.example.agrigrowbe.security.JwtUtils;
 import com.example.agrigrowbe.service.UserService;
+import com.example.agrigrowbe.service.EmailService;
 
 @RestController
-@RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000", "http://localhost:4200", "http://localhost:8000"})
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*") // Changed to allow all origins
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserService userService;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserService userService){
+    private final EmailService emailService;
+    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserService userService, EmailService emailService){
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+        this.emailService = emailService;
+    }
+    // Add this public endpoint
+    @GetMapping("/public-test")
+    public ResponseEntity<?> publicTest() {
+        System.out.println("=== PUBLIC TEST ENDPOINT HIT ===");
+        return ResponseEntity.ok(Map.of(
+            "message", "Auth public endpoint is working!",
+            "status", "success",
+            "timestamp", System.currentTimeMillis()
+        ));
     }
 
+    // Your existing methods below - keep them as they are
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return email != null && email.matches(emailRegex);
@@ -54,7 +66,7 @@ public class AuthController {
         return blockedDomains.contains(domain);
     }
 
-    @PostMapping("/auth/register")
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         System.out.println("=== REGISTRATION REQUEST RECEIVED ===");
         System.out.println("Email: " + user.getEmail());
@@ -86,6 +98,16 @@ public class AuthController {
             }
 
             System.out.println("Attempting to register user...");
+            if (user.getFullName() == null) user.setFullName("");
+            if (user.getPhone() == null) user.setPhone("");
+            if (user.getAddressLine1() == null) user.setAddressLine1("");
+            if (user.getAddressLine2() == null) user.setAddressLine2("");
+            if (user.getColony() == null) user.setColony("");
+            if (user.getCity() == null) user.setCity("");
+            if (user.getState() == null) user.setState("");
+            if (user.getPostalCode() == null) user.setPostalCode("");
+            if (user.getCountry() == null) user.setCountry("");
+
             userService.registerUser(user);
             System.out.println("User registered successfully!");
 
@@ -104,7 +126,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Map<String,String> loginRequest){
         System.out.println("=== LOGIN REQUEST RECEIVED ===");
         System.out.println("Email: " + loginRequest.get("email"));
@@ -124,6 +146,14 @@ public class AuthController {
 
             String jwt = jwtUtils.generateJwtToken(email);
             System.out.println("✅ Login successful - JWT generated for: " + email);
+
+            // Increment login count for analytics
+            userService.findByEmail(email).ifPresent(u -> {
+                int c = u.getLoginCount();
+                u.setLoginCount(c + 1);
+                u.setLastLogin(java.time.Instant.now());
+                userService.updateUser(u);
+            });
 
             Map<String, String> response = new HashMap<>();
             response.put("token", jwt);
@@ -146,7 +176,29 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/user/profile")
+    @GetMapping("/test-auth")
+    public ResponseEntity<?> testAuthentication(Authentication authentication) {
+        System.out.println("=== AUTHENTICATION TEST ===");
+        
+        if (authentication == null) {
+            System.out.println("❌ Authentication is NULL");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "No authentication found", "authenticated", false));
+        }
+        
+        System.out.println("✅ Authentication found:");
+        System.out.println("Name: " + authentication.getName());
+        System.out.println("Authorities: " + authentication.getAuthorities());
+        System.out.println("Authenticated: " + authentication.isAuthenticated());
+        
+        return ResponseEntity.ok(Map.of(
+            "authenticated", true,
+            "username", authentication.getName(),
+            "authorities", authentication.getAuthorities().toString()
+        ));
+    }
+
+    @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Authentication authentication) {
         try {
             if (authentication == null) {
@@ -185,8 +237,45 @@ public class AuthController {
                     .body(Map.of("error", "Failed to fetch profile: " + e.getMessage()));
         }
     }
-    
-    @PutMapping("/user/profile")
+    @PostMapping("/test-email")
+public ResponseEntity<?> testEmail(@RequestBody Map<String, String> request) {
+    try {
+        String toEmail = request.get("email");
+        if (toEmail == null || toEmail.trim().isEmpty()) {
+            toEmail = "jyotsnatalasila@gmail.com";
+        }
+        
+        System.out.println("🧪 Testing email configuration...");
+        System.out.println("From: jyotsnatalasila@gmail.com");
+        System.out.println("To: " + toEmail);
+        
+        boolean success = emailService.trySendSimpleMail(
+            toEmail, 
+            "Test Email from AgriGrow", 
+            "This is a test email to verify SMTP configuration is working correctly."
+        );
+        
+        if (success) {
+            return ResponseEntity.ok(Map.of(
+                "message", "Test email sent successfully!",
+                "status", "SUCCESS"
+            ));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                        "error", "Failed to send test email",
+                        "status", "FAILED"
+                    ));
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                    "error", "Test email failed: " + e.getMessage(),
+                    "status", "ERROR"
+                ));
+    }
+}
+    @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody Map<String, String> profileData, Authentication authentication) {
         try {
             if (authentication == null) {

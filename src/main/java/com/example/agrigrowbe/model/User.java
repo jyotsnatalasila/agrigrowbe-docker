@@ -2,6 +2,7 @@ package com.example.agrigrowbe.model;
 
 import jakarta.persistence.*;
 import java.util.UUID;
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
@@ -50,6 +51,9 @@ public class User {
 
     @Column(nullable = false)
     private String country;
+    
+    @Column(nullable = false)
+    private int loginCount = 0;
 
     // Getters and Setters
     public UUID getId() { return id; }
@@ -96,4 +100,13 @@ public class User {
 
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }	
+
+    public int getLoginCount() { return loginCount; }
+    public void setLoginCount(int loginCount) { this.loginCount = loginCount; }
+	public Instant getLastLogin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void setLastLogin(Instant lastLogin) {
+	}
 }

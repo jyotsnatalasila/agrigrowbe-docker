@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin(origins = "http://localhost:4000")
+@CrossOrigin(origins = {"http://localhost:4000", "http://localhost:8080"}) // ✅ UPDATED
 public class CartController {
 
     private final CartItemRepository cartItemRepository;

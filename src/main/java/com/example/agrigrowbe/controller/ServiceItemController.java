@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/services")
-@CrossOrigin(origins = "http://localhost:4000")
+@CrossOrigin(origins = {"http://localhost:4000", "http://localhost:8080"})
 public class ServiceItemController {
     private final ServiceItemRepository serviceItemRepository;
 

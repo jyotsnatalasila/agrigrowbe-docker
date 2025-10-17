@@ -4,6 +4,7 @@ import com.example.agrigrowbe.model.User;
 import com.example.agrigrowbe.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 import java.util.Optional;
@@ -11,10 +12,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/password")
-@CrossOrigin(origins = "http://localhost:4000")
+@CrossOrigin(origins = {"http://localhost:4000","http://localhost:8080"})
 public class PasswordResetController {
 
     private final UserService userService;
+
+    @Value("${app.frontend.url}") // ✅ ADD THIS
+    private String frontendUrl;
 
     public PasswordResetController(UserService userService){
         this.userService = userService;
@@ -34,7 +38,10 @@ public class PasswordResetController {
         
         String token = UUID.randomUUID().toString();
         userService.updateResetToken(token, email);
-        String resetLink = "http://localhost:4000/resetpassword?token=" + token;
+        
+        // ✅ UPDATED - Use configured frontend URL
+        String resetLink = frontendUrl + "/resetpassword?token=" + token;
+        
         userService.sendPasswordResetEmail(email, resetLink);
         
         return ResponseEntity.ok(Map.of("message", "Password reset link sent successfully"));

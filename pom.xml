@@ -108,7 +108,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.example.agrigrowbe.AgriGrowApplication</mainClass>
+                    <mainClass>com.example.agrigrowbe.AgrigrobewApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

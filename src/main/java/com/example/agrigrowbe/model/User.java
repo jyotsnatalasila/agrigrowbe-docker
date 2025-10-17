@@ -103,10 +103,13 @@ public class User {
 
     public int getLoginCount() { return loginCount; }
     public void setLoginCount(int loginCount) { this.loginCount = loginCount; }
-	public Instant getLastLogin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public void setLastLogin(Instant lastLogin) {
-	}
+	
+    private Instant lastLogin;
+    public Instant getLastLogin() { 
+        return lastLogin; 
+    }
+    
+    public void setLastLogin(Instant lastLogin) { 
+        this.lastLogin = lastLogin; 
+    }
 }

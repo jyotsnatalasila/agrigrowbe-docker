@@ -18,6 +18,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>agrigrowbe</name>
     <description>AgriGrow Backend Spring Boot Application</description>
+    
+    <!-- CHANGE PACKAGING TO WAR -->
+    <packaging>war</packaging>
 
     <properties>
         <java.version>17</java.version>
@@ -51,8 +54,6 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-        <!-- Removed Spring Cloud Gateway to avoid reactive stack -->
-
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -79,6 +80,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ADD TOMCAT DEPENDENCY FOR WAR DEPLOYMENT -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -93,13 +101,15 @@
         </dependency>
     </dependencies>
 
-    <!-- Removed Spring Cloud dependency management -->
-
     <build>
+        <finalName>agrigrowbe</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.agrigrowbe.AgriGrowApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

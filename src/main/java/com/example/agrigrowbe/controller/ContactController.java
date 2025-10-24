@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = {"http://localhost:4000", "http://localhost:8080"}) // ✅ UPDATED
+@CrossOrigin(origins = {"http://ec2-13-48-31-208.eu-north-1.compute.amazonaws.com:4000", "http://ec2-13-48-31-208.eu-north-1.compute.amazonaws.com:8080"}) // ✅ UPDATED
 public class ContactController {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);

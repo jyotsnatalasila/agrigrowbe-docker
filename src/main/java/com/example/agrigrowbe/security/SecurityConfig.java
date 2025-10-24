@@ -41,8 +41,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList( 
-                "http://ec2-13-48-31-208.eu-north-1.compute.amazonaws.com:4000",  
-                "http://ec2-13-48-31-208.eu-north-1.compute.amazonaws.com:8080"  // ADD TOMCAT PORT
+                "http://ec2-16-16-179-64.eu-north-1.compute.amazonaws.com:4000",  
+                "http://ec2-16-16-179-64.eu-north-1.compute.amazonaws.com:8080"  // ADD TOMCAT PORT
             ));
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));

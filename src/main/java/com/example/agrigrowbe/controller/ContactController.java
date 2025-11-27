@@ -13,16 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/contact")
-@CrossOrigin(origins = {"http://const res = await axios.post(
-  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
-  { password: newPassword }
-);
-:4000", "http://const res = await axios.post(
-  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
-  { password: newPassword }
-);
-:8080"}) // ✅ UPDATED
+@RequestMapping("/api/cart")
+@CrossOrigin(origins = {
+    "http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:4000",
+    "http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:8080"
+})
 public class ContactController {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);

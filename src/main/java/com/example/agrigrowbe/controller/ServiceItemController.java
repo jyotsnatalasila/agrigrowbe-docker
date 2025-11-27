@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/services")
-@CrossOrigin(origins = {"http://localhost:4000", "http://localhost:8080"})
+@CrossOrigin(origins = {"http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:4000", "http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:8080"})
 public class ServiceItemController {
     private final ServiceItemRepository serviceItemRepository;
 

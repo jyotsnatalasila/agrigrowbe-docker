@@ -12,7 +12,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/password")
-@CrossOrigin(origins = {"http://localhost:4000","http://localhost:8080"})
+@CrossOrigin(origins = {"http://const res = await axios.post(
+  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
+  { password: newPassword }
+);
+:4000","http://const res = await axios.post(
+  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
+  { password: newPassword }
+);
+:8080"})
 public class PasswordResetController {
 
     private final UserService userService;

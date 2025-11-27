@@ -10,7 +10,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin(origins = {"http://localhost:4000", "http://localhost:8080"}) // ✅ UPDATED
+@CrossOrigin(origins = {"http://const res = await axios.post(
+  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
+  { password: newPassword }
+);
+:4000", "http://const res = await axios.post(
+  `http://ec2-13-62-223-118.eu-north-1.compute.amazonaws.com:1010/agrigrowbe/api/password/reset?token=${encodeURIComponent(token)}`,
+  { password: newPassword }
+);
+:8080"}) // ✅ UPDATED
 public class CartController {
 
     private final CartItemRepository cartItemRepository;
